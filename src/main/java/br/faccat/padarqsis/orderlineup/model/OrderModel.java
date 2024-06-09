@@ -18,6 +18,6 @@ public class OrderModel {
     private Integer code;
     private List<ProductModel> productList;
     private List<Integer> productQuantityList;
-    private String customerId;
+    private CustomerModel customer;
     private Double totalValue;
 }
