@@ -5,6 +5,7 @@ import br.faccat.padarqsis.orderlineup.model.CustomerModel;
 import br.faccat.padarqsis.orderlineup.model.OrderDto;
 import br.faccat.padarqsis.orderlineup.model.OrderModel;
 import br.faccat.padarqsis.orderlineup.model.ProductModel;
+import br.faccat.padarqsis.orderlineup.rabbitMQ.CustomerProducer;
 import br.faccat.padarqsis.orderlineup.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductService productService;
     private final CustomerIntegration customerIntegration;
+    private final CustomerProducer customerProducer;
 
     public OrderModel createOrder(OrderDto orderDto) {
         var order = buildOrderFromDto(orderDto);
@@ -93,6 +95,7 @@ public class OrderService {
     }
 
     private CustomerModel getCustomer(String customerId) {
-        return customerIntegration.getCustomerById(customerId);
+        return customerProducer.generateCustomer(customerId);
+//        return customerIntegration.getCustomerById(customerId);
     }
 }
