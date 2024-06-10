@@ -5,18 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderModel {
+public class CustomerModel {
 
     private String id;
-    private Integer code;
-    private List<ProductModel> productList;
-    private List<Integer> productQuantityList;
-    private CustomerModel customer;
-    private Double totalValue;
+    private String name;
+    private String email;
+    private String phone;
+    private String address;
+    private LocalDate birthDate;
 }

@@ -32,7 +32,7 @@ public class OrderController {
     }
 
     @GetMapping("/customer/{customerId}")
-    public List<OrderModel> listOrdersByCustomerId(@RequestParam String customerId) {
+    public List<OrderModel> listOrdersByCustomerId(@PathVariable String customerId) {
         return orderService.listOrdersByCustomerId(customerId);
     }
 

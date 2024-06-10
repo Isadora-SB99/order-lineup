@@ -1,5 +1,7 @@
 package br.faccat.padarqsis.orderlineup.service;
 
+import br.faccat.padarqsis.orderlineup.integration.CustomerIntegration;
+import br.faccat.padarqsis.orderlineup.model.CustomerModel;
 import br.faccat.padarqsis.orderlineup.model.OrderDto;
 import br.faccat.padarqsis.orderlineup.model.OrderModel;
 import br.faccat.padarqsis.orderlineup.model.ProductModel;
@@ -8,7 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -17,6 +18,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductService productService;
+    private final CustomerIntegration customerIntegration;
 
     public OrderModel createOrder(OrderDto orderDto) {
         var order = buildOrderFromDto(orderDto);
@@ -34,6 +36,11 @@ public class OrderService {
         } else {
             return optionalOrder.get();
         }
+    }
+
+    public List<OrderModel> listOrdersByCustomerId(String customerId) {
+        var customer = getCustomer(customerId);
+        return orderRepository.findAllByCustomer(customer);
     }
 
     public OrderModel updateOrder(String id, OrderDto orderDto) {
@@ -64,7 +71,7 @@ public class OrderService {
                 .code(setOrderCode())
                 .productList(products)
                 .productQuantityList(orderDto.getProductQuantityList())
-                .customerId(orderDto.getCustomerId())
+                .customer(getCustomer(orderDto.getCustomerId()))
                 .totalValue(totalValue)
                 .build();
     }
@@ -85,7 +92,7 @@ public class OrderService {
                 .sum();
     }
 
-    public List<OrderModel> listOrdersByCustomerId(String customerId) {
-        return orderRepository.findAllByCustomerId(customerId);
+    private CustomerModel getCustomer(String customerId) {
+        return customerIntegration.getCustomerById(customerId);
     }
 }
